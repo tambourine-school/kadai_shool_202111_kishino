@@ -1,4 +1,5 @@
 <x-task-layout>
+    <x-slot name="title">タスク作成</x-slot>
     <div>
         <h2 class="h4">タスクの追加</h2>
     </div>
@@ -14,7 +15,7 @@
                 <input type="date" class="form-control" name="date_on">
             </div>
             <div class="space-evenly mt-5">
-                <input type="submit" class="btn btn-light" value="キャンセル">
+                <input type="button" onclick="location.href='/tasks'" class="btn btn-light" value="キャンセル">
                 <input type="submit" class="btn btn-dark" value="タスクの追加">
             </div>
         </form>

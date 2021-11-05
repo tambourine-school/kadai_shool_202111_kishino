@@ -1,4 +1,5 @@
 <x-task-layout>
+    <x-slot name="title">完了タスク一覧</x-slot>
     <div>
         <h2 class="h4">完了タスク</h2>
     </div>
@@ -24,4 +25,5 @@
         </div>
         </div>
         @endfor
+        <input type="submit" onclick="location.href='/tasks'" class="btn btn-dark mt-3" value="タスク一覧へ戻る">
 </x-task-layout>

@@ -1,4 +1,5 @@
 <x-task-layout>
+    <x-slot name="title">タスク編集</x-slot>
     <div>
         <h2 class="h4">タスクの編集</h2>
     </div>
@@ -14,11 +15,11 @@
                 <input type="date" class="form-control" name="date_on">
             </div>
             <div class="space-evenly mt-5">
-                <input type="submit" class="btn btn-light" value="キャンセル">
+                <input type="button" onclick="location.href='/tasks'" class="btn btn-light" value="キャンセル">
                 <input type="submit" class="btn btn-dark" value="タスクの修正">
             </div>
             <div class="delete-button">
-                <button type="button" class="btn btn-danger mt-3">タスクを削除</button>
+                <button type="button" onclick="location.href='/tasks'" class="btn btn-danger mt-3">タスクを削除</button>
             </div>
         </form>
     </div>

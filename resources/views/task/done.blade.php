@@ -1,4 +1,5 @@
 <x-task-layout>
+    <x-slot name="title">タスク完了</x-slot>
     <div class="mb-5">
         <h2 class="h4">タスク名</h2>
     </div>
@@ -26,7 +27,7 @@
                 <textarea class="form-control" name="action" rows="5"></textarea>
             </div>
             <div class="space-evenly mt-5">
-                <input type="submit" class="btn btn-light" value="キャンセル">
+                <input type="button" onclick="location.href='/tasks'" class="btn btn-light" value="キャンセル">
                 <input type="submit" class="btn btn-dark" value="完了">
             </div>
         </form>
