@@ -6,31 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{$title}}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .container {
-            max-width: 480px;
-        }
-
-        .task-list {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .space-evenly {
-            display: flex;
-            justify-content: space-evenly;
-        }
-
-        .down-arrow {
-            display: flex;
-            justify-content: center;
-        }
-
-        .delete-button {
-            display: flex;
-            justify-content: center;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
 </head>
 
 <body>

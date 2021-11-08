@@ -6,7 +6,7 @@
     @for ($i = 0; $i < 5; $i++) <div class="card mb-2">
         <div class="card-body">
             <div>
-                <div>タスク{{ $i }}</div>
+                <h5>タスク{{ $i }}</h5>
                 <div>2021/11/1</div>
                 <div>達成</div>
             </div>
@@ -14,11 +14,11 @@
                 <tbody>
                     <tr>
                         <td>なぜ？</td>
-                        <td>できた理由・できなかった理由</td>
+                        <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, quis facere officia, atque neque cumque nisi placeat commodi amet ipsum unde sequi similique sapiente natus nulla beatae iste. Beatae, eos.</td>
                     </tr>
                     <tr>
                         <td>どうする？</td>
-                        <td>できた理由・できなかった理由</td>
+                        <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam quis voluptas maiores magnam ab? Illum magni iure, tenetur quisquam eos distinctio fuga! Laborum similique iusto delectus quia sit, nostrum quod.</td>
                     </tr>
                 </tbody>
             </table>
