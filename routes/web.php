@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +18,15 @@ Route::get('/', function () {
     return redirect('/tasks');
 });
 
+// Route::get('/tasks', function () {
+//     return view('task.list');
+// });
+
 Route::get('/tasks', function () {
-    return view('task.list');
+    $tasks = DB::table("tasks")->get();
+    return view('task.list', [
+        "tasks" => $tasks
+    ]);
 });
 
 Route::get('/tasks/new', function () {
