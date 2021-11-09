@@ -18,10 +18,6 @@ Route::get('/', function () {
     return redirect('/tasks');
 });
 
-// Route::get('/tasks', function () {
-//     return view('task.list');
-// });
-
 Route::get('/tasks', function () {
     $tasks = DB::table("tasks")->get();
     return view('task.list', [
@@ -30,17 +26,29 @@ Route::get('/tasks', function () {
 });
 
 Route::get('/tasks/new', function () {
-    return view('task.new');
+    $tasks = DB::table("tasks")->get();
+    return view('task.new', [
+        "tasks" => $tasks
+    ]);
 });
 
-Route::get('/tasks/{id}/edit', function () {
-    return view('task.edit');
+Route::get('/tasks/{id}/edit', function ($id) {
+    $task = DB::table("tasks")->where("id", "=", $id)->get();
+    return view('task.edit', [
+        "task" => $task
+    ]);
 });
 
-Route::get('/tasks/{id}/done', function () {
-    return view('task.done');
+Route::get('/tasks/{id}/done', function ($id) {
+    $task = DB::table("tasks")->where("id", "=", $id)->get();
+    return view('task.done', [
+        "task" => $task
+    ]);
 });
 
 Route::get('/finished-list', function () {
-    return view('task.finished-list');
+    $tasks = DB::table("tasks")->where("status", "!=", '実行中')->get();
+    return view('task.finished-list', [
+        "tasks" => $tasks
+    ]);
 });

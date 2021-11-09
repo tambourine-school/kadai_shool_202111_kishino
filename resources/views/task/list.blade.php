@@ -8,8 +8,8 @@
     <div class="card mb-2">
         <div class="task-list card-body">
             <div>
-                <div>{{ $task->name }}</div>
-                <div>2021/11/1</div>
+                <div>{{ $task->plan }}</div>
+                <div>{{ $task->date_do }}</div>
             </div>
             <div>
                 <button type="button" onclick="location.href='/tasks/{{ $task->id }}/edit'" class="btn btn-light">編集</button>
