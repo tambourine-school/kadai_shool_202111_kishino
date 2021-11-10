@@ -9,7 +9,11 @@
             <div>
                 <h5>{{ $task->plan }}</h5>
                 <div>{{ $task->date_do }}</div>
-                <div>{{ $task->status }}</div>
+                @if($task->status == 1)
+                <div>達成</div>
+                @else
+                <div>未達成</div>
+                @endif
             </div>
             <table>
                 <tbody>

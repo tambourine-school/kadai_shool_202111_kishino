@@ -19,17 +19,14 @@ Route::get('/', function () {
 });
 
 Route::get('/tasks', function () {
-    $tasks = DB::table("tasks")->get();
+    $tasks = DB::table("tasks")->where("status", "=", 0)->get();
     return view('task.list', [
         "tasks" => $tasks
     ]);
 });
 
 Route::get('/tasks/new', function () {
-    $tasks = DB::table("tasks")->get();
-    return view('task.new', [
-        "tasks" => $tasks
-    ]);
+    return view('task.new');
 });
 
 Route::get('/tasks/{id}/edit', function ($id) {
@@ -47,7 +44,9 @@ Route::get('/tasks/{id}/done', function ($id) {
 });
 
 Route::get('/finished-list', function () {
-    $tasks = DB::table("tasks")->where("status", "!=", '実行中')->get();
+    $tasks = DB::table("tasks")->where("status", "!=", 0)->get();
+    // $tasks = DB::table("tasks")->where("status", "=", 1, true)->where("status", "=", 2)->get();
+    // $tasks = DB::table("tasks")->where("status", "=", 1)->and("status", "=", 2)->get();
     return view('task.finished-list', [
         "tasks" => $tasks
     ]);

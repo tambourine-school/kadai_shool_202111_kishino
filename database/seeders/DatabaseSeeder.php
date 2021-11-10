@@ -17,27 +17,43 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         DB::table("tasks")->insert([
-            "plan" => "牛乳を買う",
+            "plan" => "運動30分",
             "date_do" => Carbon::now(),
-            "status" => '実行中',
-            "check" => "牛乳を買いに行く",
-            "action" => "牛乳を買いに行く",
+            "status" => 0,
+            "check" => "できた理由",
+            "action" => "次にどうするか",
             "created_at" => Carbon::now(),
         ]);
         DB::table("tasks")->insert([
-            "plan" => "旅行の予定を立てる",
+            "plan" => "腕立て100回",
             "date_do" => Carbon::now(),
-            "status" => '達成',
-            "check" => "友達との旅行の相談を Zoom で",
-            "action" => "友達との旅行の相談を Zoom で",
+            "status" => 0,
+            "check" => "できた理由",
+            "action" => "次にどうするか",
             "created_at" => Carbon::now(),
         ]);
         DB::table("tasks")->insert([
-            "plan" => "試験の勉強を進める",
+            "plan" => "腹筋100回",
             "date_do" => Carbon::now(),
-            "status" => '未達成',
-            "check" => "対策本を早めにやりきる",
-            "action" => "対策本を早めにやりきる",
+            "status" => 0,
+            "check" => "できた理由",
+            "action" => "次にどうするか",
+            "created_at" => Carbon::now(),
+        ]);
+        DB::table("tasks")->insert([
+            "plan" => "朝に運動をする",
+            "date_do" => Carbon::now(),
+            "status" => 1,
+            "check" => "時間を決めたのがよかった",
+            "action" => "質を重視したトレーニングにする",
+            "created_at" => Carbon::now(),
+        ]);
+        DB::table("tasks")->insert([
+            "plan" => "運動をする",
+            "date_do" => Carbon::now(),
+            "status" => 2,
+            "check" => "飲み会に誘われた",
+            "action" => "朝に運動をする",
             "created_at" => Carbon::now(),
         ]);
     }

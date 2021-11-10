@@ -8,7 +8,7 @@
             @csrf
             <div class="mb-3">
                 <label class="form-label">{{ $task[0]->plan }}</label>
-                <input type="text" class="form-control" name="name">
+                <input type="text" class="form-control" name="name" value="{{ $task[0]->plan }}">
                 @if(true)
                 <div class="error-message">30文字以内で入力してください</div>
                 @endif
