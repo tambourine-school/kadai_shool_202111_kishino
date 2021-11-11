@@ -4,17 +4,18 @@
         <a href="/finished-list" class="btn btn-light">完了タスク一覧へ</a>
         <a href="/tasks/new" class="btn btn-light">タスクの追加</a>
     </div>
-    @for ($i = 0; $i < 5; $i++) <div class="card mb-2">
+    @foreach($tasks as $task)
+    <div class="card mb-2">
         <div class="task-list card-body">
             <div>
-                <div>タスク{{ $i }}</div>
-                <div>2021/11/1</div>
+                <div>{{ $task->plan }}</div>
+                <div>{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $task->date_do)->format("Y/m/d") }}</div>
             </div>
             <div>
-                <button type="button" onclick="location.href='/tasks/{{ $i }}/edit'" class="btn btn-light">編集</button>
-                <button type="button" onclick="location.href='/tasks/{{ $i }}/done'" class="btn btn-dark">完了</button>
+                <button type="button" onclick="location.href='/tasks/{{ $task->id }}/edit'" class="btn btn-light">編集</button>
+                <button type="button" onclick="location.href='/tasks/{{ $task->id }}/done'" class="btn btn-dark">完了</button>
             </div>
         </div>
-        </div>
-        @endfor
+    </div>
+    @endforeach
 </x-task-layout>

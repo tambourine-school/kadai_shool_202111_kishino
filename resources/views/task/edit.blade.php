@@ -8,14 +8,14 @@
             @csrf
             <div class="mb-3">
                 <label class="form-label">タスク名</label>
-                <input type="text" class="form-control" name="name">
+                <input type="text" class="form-control" name="name" value="{{$task->plan}}">
                 @if(true)
                 <div class="error-message">30文字以内で入力してください</div>
                 @endif
             </div>
             <div class="mb-3">
                 <label class="form-label">日付</label>
-                <input type="date" class="form-control" name="date_on">
+                <input type="date" class="form-control" name="date_on" value="{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $task->date_do)->format("Y-m-d")}}">
                 @if(false)
                 <div class="error-message">適切な日付を入力してください</div>
                 @endif

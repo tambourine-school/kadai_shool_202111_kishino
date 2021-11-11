@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,21 +19,33 @@ Route::get('/', function () {
 });
 
 Route::get('/tasks', function () {
-    return view('task.list');
+    $tasks = DB::table("tasks")->where("status", "=", 0)->get();
+    return view('task.list', [
+        "tasks" => $tasks
+    ]);
 });
 
 Route::get('/tasks/new', function () {
     return view('task.new');
 });
 
-Route::get('/tasks/{id}/edit', function () {
-    return view('task.edit');
+Route::get('/tasks/{id}/edit', function ($id) {
+    $task = DB::table("tasks")->where("id", "=", $id)->first();
+    return view('task.edit', [
+        "task" => $task
+    ]);
 });
 
-Route::get('/tasks/{id}/done', function () {
-    return view('task.done');
+Route::get('/tasks/{id}/done', function ($id) {
+    $task = DB::table("tasks")->where("id", "=", $id)->first();
+    return view('task.done', [
+        "task" => $task
+    ]);
 });
 
 Route::get('/finished-list', function () {
-    return view('task.finished-list');
+    $tasks = DB::table("tasks")->whereIn("status", [1, 2])->get();
+    return view('task.finished-list', [
+        "tasks" => $tasks
+    ]);
 });
