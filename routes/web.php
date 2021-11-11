@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,52 +13,10 @@ use Carbon\Carbon;
 |
 */
 
-Route::get('/', function () {
-    return redirect('/tasks');
-});
-
-Route::get('/tasks', function () {
-    $tasks = DB::table("tasks")->where("status", "=", 0)->orderBy('date_do')->get();
-    return view('task.list', [
-        "tasks" => $tasks
-    ]);
-});
-
-Route::get('/tasks/new', function () {
-    return view('task.new');
-});
-
-Route::get('/tasks/{id}/edit', function ($id) {
-    $task = DB::table("tasks")->where("id", "=", $id)->first();
-    return view('task.edit', [
-        "task" => $task
-    ]);
-});
-
-Route::get('/tasks/{id}/done', function ($id) {
-    $task = DB::table("tasks")->where("id", "=", $id)->first();
-    return view('task.done', [
-        "task" => $task
-    ]);
-});
-
-Route::get('/finished-list', function () {
-    $tasks = DB::table("tasks")->whereIn("status", [1, 2])->orderBy('date_do')->get();
-    return view('task.finished-list', [
-        "tasks" => $tasks
-    ]);
-});
-
-Route::get('/search', function () {
-    $keyword = request()->get("keyword");
-    $targetPeriod = request()->get("target-period");
-    if ($targetPeriod == 'past') {
-        $now = Carbon::now();
-        $tasks = DB::table("tasks")->where("plan", "like", "%$keyword%")->where("date_do", "<=", $now)->orderBy('date_do')->get();
-    } elseif ($targetPeriod == '') {
-        $tasks = DB::table("tasks")->where("plan", "like", "%$keyword%")->orderBy('date_do')->get();
-    }
-    return view('task.search', [
-        "tasks" => $tasks, "keyword" => $keyword
-    ]);
-});
+Route::get('/', [\App\Http\Controllers\TaskController::class, "getTop"]);
+Route::get('/tasks', [\App\Http\Controllers\TaskController::class, "getList"]);
+Route::get('/tasks/new', [\App\Http\Controllers\TaskController::class, "getNew"]);
+Route::get('/tasks/{id}/edit', [\App\Http\Controllers\TaskController::class, "getEdit"]);
+Route::get('/tasks/{id}/done', [\App\Http\Controllers\TaskController::class, "getDone"]);
+Route::get('/finished-list', [\App\Http\Controllers\TaskController::class, "getFinishedList"]);
+Route::get('/search', [\App\Http\Controllers\TaskController::class, "getSearch"]);
