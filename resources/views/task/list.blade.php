@@ -1,6 +1,7 @@
 <x-task-layout>
     <x-slot name="title">タスク一覧</x-slot>
     <div class="text-end my-3">
+        <a href="/search" class="btn btn-light">検索画面へ</a>
         <a href="/finished-list" class="btn btn-light">完了タスク一覧へ</a>
         <a href="/tasks/new" class="btn btn-light">タスクの追加</a>
     </div>

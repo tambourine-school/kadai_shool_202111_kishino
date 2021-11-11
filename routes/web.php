@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/tasks', function () {
-    $tasks = DB::table("tasks")->where("status", "=", 0)->get();
+    $tasks = DB::table("tasks")->where("status", "=", 0)->orderBy('date_do')->get();
     return view('task.list', [
         "tasks" => $tasks
     ]);
@@ -44,8 +45,22 @@ Route::get('/tasks/{id}/done', function ($id) {
 });
 
 Route::get('/finished-list', function () {
-    $tasks = DB::table("tasks")->whereIn("status", [1, 2])->get();
+    $tasks = DB::table("tasks")->whereIn("status", [1, 2])->orderBy('date_do')->get();
     return view('task.finished-list', [
         "tasks" => $tasks
+    ]);
+});
+
+Route::get('/search', function () {
+    $keyword = request()->get("keyword");
+    $targetPeriod = request()->get("target-period");
+    if ($targetPeriod == 'past') {
+        $now = Carbon::now();
+        $tasks = DB::table("tasks")->where("plan", "like", "%$keyword%")->where("date_do", "<=", $now)->orderBy('date_do')->get();
+    } elseif ($targetPeriod == '') {
+        $tasks = DB::table("tasks")->where("plan", "like", "%$keyword%")->orderBy('date_do')->get();
+    }
+    return view('task.search', [
+        "tasks" => $tasks, "keyword" => $keyword
     ]);
 });
