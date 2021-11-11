@@ -9,7 +9,7 @@
         <div class="task-list card-body">
             <div>
                 <div>{{ $task->plan }}</div>
-                <div>{{ $task->date_do }}</div>
+                <div>{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $task->date_do)->format("Y/m/d") }}</div>
             </div>
             <div>
                 <button type="button" onclick="location.href='/tasks/{{ $task->id }}/edit'" class="btn btn-light">編集</button>

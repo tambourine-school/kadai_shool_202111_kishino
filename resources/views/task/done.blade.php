@@ -1,7 +1,7 @@
 <x-task-layout>
     <x-slot name="title">タスク完了</x-slot>
     <div class="mb-5">
-        <h2 class="h4">{{ $task[0]->plan }}</h2>
+        <h2 class="h4">{{ $task->plan }}</h2>
     </div>
     <div class="mb-3">
         <form method="post">

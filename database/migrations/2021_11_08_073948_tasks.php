@@ -18,8 +18,8 @@ class Tasks extends Migration
             $table->string('plan');
             $table->integer('status');
             $table->dateTime('date_do');
-            $table->text('check');
-            $table->text('action');
+            $table->text('check')->nullable();
+            $table->text('action')->nullable();
             $table->timestamps();
         });
     }

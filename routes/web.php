@@ -30,23 +30,21 @@ Route::get('/tasks/new', function () {
 });
 
 Route::get('/tasks/{id}/edit', function ($id) {
-    $task = DB::table("tasks")->where("id", "=", $id)->get();
+    $task = DB::table("tasks")->where("id", "=", $id)->first();
     return view('task.edit', [
         "task" => $task
     ]);
 });
 
 Route::get('/tasks/{id}/done', function ($id) {
-    $task = DB::table("tasks")->where("id", "=", $id)->get();
+    $task = DB::table("tasks")->where("id", "=", $id)->first();
     return view('task.done', [
         "task" => $task
     ]);
 });
 
 Route::get('/finished-list', function () {
-    $tasks = DB::table("tasks")->where("status", "!=", 0)->get();
-    // $tasks = DB::table("tasks")->where("status", "=", 1, true)->where("status", "=", 2)->get();
-    // $tasks = DB::table("tasks")->where("status", "=", 1)->and("status", "=", 2)->get();
+    $tasks = DB::table("tasks")->whereIn("status", [1, 2])->get();
     return view('task.finished-list', [
         "tasks" => $tasks
     ]);
