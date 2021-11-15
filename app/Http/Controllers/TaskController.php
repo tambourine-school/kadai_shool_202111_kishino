@@ -27,11 +27,6 @@ class TaskController
 
     public function getEdit($id)
     {
-        echo '' . 'hoge'; // hoge
-        echo '' . (int)'hoge'; // 0
-        echo (int)'hoge'; // 0
-        echo gettype(1 . 1); // string
-        echo 1 . 1; // '11'
         if ($id === "" . (int)$id && DB::table("tasks")->where("id", "=", "$id")->exists()) {
             return view('task.edit', [
                 "task" => $this->getFirstTask($id)
