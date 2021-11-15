@@ -32,15 +32,19 @@ class TaskController
                 "task" => $this->getFirstTask($id)
             ]);
         } else {
-            return redirect('/tasks');
+            return abort(404);
         }
     }
 
     public function getDone($id)
     {
-        return view('task.done', [
-            "task" => $this->getFirstTask($id)
-        ]);
+        if ($id === "" . (int)$id && DB::table("tasks")->where("id", "=", "$id")->exists()) {
+            return view('task.done', [
+                "task" => $this->getFirstTask($id)
+            ]);
+        } else {
+            return abort(404);
+        }
     }
 
     public function getFinishedList()

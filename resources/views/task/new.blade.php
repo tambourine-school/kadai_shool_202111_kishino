@@ -8,15 +8,15 @@
             @csrf
             <div class="mb-3">
                 <label class="form-label">タスク名</label>
-                <input type="text" class="form-control" name="name">
-                @if(true)
+                <input type="text" class="form-control" name="plan" value="{{session()->get("old_form.plan")}}">
+                @if(session()->get("errors.plan"))
                 <div class="error-message">タスクを入力してください</div>
                 @endif
             </div>
             <div class="mb-3">
                 <label class="form-label">日付</label>
-                <input type="date" class="form-control" name="date_on">
-                @if(true)
+                <input type="date" class="form-control" name="date_do" value="{{session()->get("old_form.date_do")}}">
+                @if(session()->get("errors.date_do"))
                 <div class="error-message">適切な日付を入力してください</div>
                 @endif
             </div>
