@@ -9,11 +9,11 @@
             <div class="mb-3">
                 <div class="space-evenly">
                     <div>
-                        <input type="radio" aria-label="Radio button for following text input">
+                        <input type="radio" name="status" value="1">
                         達成
                     </div>
                     <div>
-                        <input type="radio" aria-label="Radio button for following text input">
+                        <input type="radio" name="status" value="2">
                         未達成
                     </div>
                 </div>

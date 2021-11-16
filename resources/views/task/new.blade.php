@@ -9,15 +9,19 @@
             <div class="mb-3">
                 <label class="form-label">タスク名</label>
                 <input type="text" class="form-control" name="plan" value="{{session()->get("old_form.plan")}}">
-                @if(session()->get("errors.plan"))
+                @if(session()->get("errors.plan") === ['The plan field is required.'])
                 <div class="error-message">タスクを入力してください</div>
+                @elseif(session()->get("errors.plan") === ['The plan must not be greater than 20 characters.'])
+                <div class="error-message">20文字以内で入力してください</div>
                 @endif
             </div>
             <div class="mb-3">
                 <label class="form-label">日付</label>
                 <input type="date" class="form-control" name="date_do" value="{{session()->get("old_form.date_do")}}">
-                @if(session()->get("errors.date_do"))
+                @if(session()->get("errors.date_do") === ['The date do field is required.'])
                 <div class="error-message">適切な日付を入力してください</div>
+                @elseif(session()->get("errors.date_do") === ['The date do must be a date after yesterday.'])
+                <div class="error-message">本日以降を入力してください</div>
                 @endif
             </div>
             <div class="space-evenly mt-5">

@@ -27,13 +27,15 @@ class TaskController
 
     public function getEdit($id)
     {
-        if ($id === "" . (int)$id && DB::table("tasks")->where("id", "=", "$id")->exists()) {
-            return view('task.edit', [
-                "task" => $this->getFirstTask($id)
-            ]);
-        } else {
+        if ($id !== "" . (int)$id) {
             return abort(404);
         }
+        if (!(DB::table("tasks")->where("id", "=", "$id")->first())) {
+            return abort(404);
+        }
+        return view('task.edit', [
+            "task" => $this->getFirstTask($id)
+        ]);
     }
 
     public function getDone($id)

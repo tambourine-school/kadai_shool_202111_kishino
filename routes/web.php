@@ -32,7 +32,7 @@ Route::post('/tasks/new', function () {
     ];
     $rules = [
         "plan" => ["required", "max:20"],
-        "date_do" => ["required"],
+        "date_do" => ["required", "after:yesterday"],
     ];
     $val = validator($payload, $rules);
     if ($val->fails()) {
@@ -41,5 +41,38 @@ Route::post('/tasks/new', function () {
         return redirect("/tasks/new");
     }
     DB::table("tasks")->insert($payload);
+    return redirect("/tasks");
+});
+
+Route::post('/tasks/{id}/edit', function ($id) {
+    $payload = [
+        "plan" => request()->get("plan"),
+        "date_do" => request()->get("date_do"),
+    ];
+    $rules = [
+        "plan" => ["required", "max:20"],
+        "date_do" => ["required", "after:yesterday"],
+    ];
+    $val = validator($payload, $rules);
+    if ($val->fails()) {
+        session()->flash("old_form", $payload);
+        session()->flash("errors", $val->errors()->toArray());
+        return redirect("/tasks/new");
+    }
+    DB::table("tasks")->where("id", $id)->update($payload);
+    return redirect("/tasks");
+});
+
+Route::post('/tasks/{id}/delete', function ($id) {
+    DB::table("tasks")->where("id", $id)->delete();
+    return redirect("/tasks");
+});
+
+Route::post('/tasks/{id}/done', function ($id) {
+    DB::table("tasks")->where("id", $id)->update([
+        "status" => request()->get("status"),
+        "check" => request()->get("check"),
+        "action" => request()->get("action"),
+    ]);
     return redirect("/tasks");
 });
