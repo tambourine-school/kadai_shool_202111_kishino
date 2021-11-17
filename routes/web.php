@@ -57,7 +57,7 @@ Route::post('/tasks/{id}/edit', function ($id) {
     if ($val->fails()) {
         session()->flash("old_form", $payload);
         session()->flash("errors", $val->errors()->toArray());
-        return redirect("/tasks/new");
+        return redirect("/tasks/$id/edit");
     }
     DB::table("tasks")->where("id", $id)->update($payload);
     return redirect("/tasks");
@@ -69,10 +69,22 @@ Route::post('/tasks/{id}/delete', function ($id) {
 });
 
 Route::post('/tasks/{id}/done', function ($id) {
-    DB::table("tasks")->where("id", $id)->update([
+    $payload = [
         "status" => request()->get("status"),
         "check" => request()->get("check"),
         "action" => request()->get("action"),
-    ]);
+    ];
+    $rules = [
+        "status" => ["required"],
+        "check" => ["required", "max:400"],
+        "action" => ["required", "max:400"],
+    ];
+    $val = validator($payload, $rules);
+    if ($val->fails()) {
+        session()->flash("old_form", $payload);
+        session()->flash("errors", $val->errors()->toArray());
+        return redirect("/tasks/$id/done");
+    }
+    DB::table("tasks")->where("id", $id)->update($payload);
     return redirect("/tasks");
 });

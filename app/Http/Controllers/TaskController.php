@@ -30,23 +30,34 @@ class TaskController
         if ($id !== "" . (int)$id) {
             return abort(404);
         }
-        if (!(DB::table("tasks")->where("id", "=", "$id")->first())) {
+        $task = $this->getFirstTask($id);
+        if (!$task) {
             return abort(404);
         }
+        if (!(session()->get("old_form"))) {
+            $payload = [
+                "plan" => $task->plan,
+                "date_do" => Carbon::createFromFormat('Y-m-d H:i:s', $task->date_do)->format("Y-m-d"),
+            ];
+            session()->flash("old_form", $payload);
+        }
         return view('task.edit', [
-            "task" => $this->getFirstTask($id)
+            "task" => $task
         ]);
     }
 
     public function getDone($id)
     {
-        if ($id === "" . (int)$id && DB::table("tasks")->where("id", "=", "$id")->exists()) {
-            return view('task.done', [
-                "task" => $this->getFirstTask($id)
-            ]);
-        } else {
+        if ($id !== "" . (int)$id) {
             return abort(404);
         }
+        $task = $this->getFirstTask($id);
+        if (!$task) {
+            return abort(404);
+        }
+        return view('task.done', [
+            "task" => $task
+        ]);
     }
 
     public function getFinishedList()
