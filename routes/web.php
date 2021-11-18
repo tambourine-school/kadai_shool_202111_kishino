@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,76 +13,15 @@ use Carbon\Carbon;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\TaskController::class, "getTop"]);
-Route::get('/tasks', [\App\Http\Controllers\TaskController::class, "getList"]);
-Route::get('/tasks/new', [\App\Http\Controllers\TaskController::class, "getNew"]);
-Route::get('/tasks/{id}/edit', [\App\Http\Controllers\TaskController::class, "getEdit"]);
-Route::get('/tasks/{id}/done', [\App\Http\Controllers\TaskController::class, "getDone"]);
-Route::get('/finished-list', [\App\Http\Controllers\TaskController::class, "getFinishedList"]);
-Route::get('/search', [\App\Http\Controllers\TaskController::class, "getSearch"]);
+Route::get('/', [\App\Http\Controllers\TaskController::class, "getTopPage"]);
+Route::get('/tasks', [\App\Http\Controllers\TaskController::class, "getTasksPage"]);
+Route::get('/tasks/new', [\App\Http\Controllers\TaskController::class, "getNewTaskPage"]);
+Route::get('/tasks/{id}/edit', [\App\Http\Controllers\TaskController::class, "getEditTaskPage"]);
+Route::get('/tasks/{id}/done', [\App\Http\Controllers\TaskController::class, "getDoneTaskPage"]);
+Route::get('/finished-list', [\App\Http\Controllers\TaskController::class, "getFinishedTaskPage"]);
+Route::get('/search', [\App\Http\Controllers\TaskController::class, "getSearchPage"]);
 
-Route::post('/tasks/new', function () {
-    $payload = [
-        "plan" => request()->get("plan"),
-        "date_do" => request()->get("date_do"),
-        "status" => 0,
-        "created_at" => Carbon::now(),
-    ];
-    $rules = [
-        "plan" => ["required", "max:20"],
-        "date_do" => ["required", "after:yesterday"],
-    ];
-    $val = validator($payload, $rules);
-    if ($val->fails()) {
-        session()->flash("old_form", $payload);
-        session()->flash("errors", $val->errors()->toArray());
-        return redirect("/tasks/new");
-    }
-    DB::table("tasks")->insert($payload);
-    return redirect("/tasks");
-});
-
-Route::post('/tasks/{id}/edit', function ($id) {
-    $payload = [
-        "plan" => request()->get("plan"),
-        "date_do" => request()->get("date_do"),
-    ];
-    $rules = [
-        "plan" => ["required", "max:20"],
-        "date_do" => ["required", "after:yesterday"],
-    ];
-    $val = validator($payload, $rules);
-    if ($val->fails()) {
-        session()->flash("old_form", $payload);
-        session()->flash("errors", $val->errors()->toArray());
-        return redirect("/tasks/$id/edit");
-    }
-    DB::table("tasks")->where("id", $id)->update($payload);
-    return redirect("/tasks");
-});
-
-Route::post('/tasks/{id}/delete', function ($id) {
-    DB::table("tasks")->where("id", $id)->delete();
-    return redirect("/tasks");
-});
-
-Route::post('/tasks/{id}/done', function ($id) {
-    $payload = [
-        "status" => request()->get("status"),
-        "check" => request()->get("check"),
-        "action" => request()->get("action"),
-    ];
-    $rules = [
-        "status" => ["required"],
-        "check" => ["required", "max:400"],
-        "action" => ["required", "max:400"],
-    ];
-    $val = validator($payload, $rules);
-    if ($val->fails()) {
-        session()->flash("old_form", $payload);
-        session()->flash("errors", $val->errors()->toArray());
-        return redirect("/tasks/$id/done");
-    }
-    DB::table("tasks")->where("id", $id)->update($payload);
-    return redirect("/tasks");
-});
+Route::post('/tasks/new', [\App\Http\Controllers\TaskController::class, "postNewTask"]);
+Route::post('/tasks/{id}/edit', [\App\Http\Controllers\TaskController::class, "postEditTask"]);
+Route::post('/tasks/{id}/delete', [\App\Http\Controllers\TaskController::class, "postDeleteTask"]);
+Route::post('/tasks/{id}/done', [\App\Http\Controllers\TaskController::class, "postDoneTask"]);
