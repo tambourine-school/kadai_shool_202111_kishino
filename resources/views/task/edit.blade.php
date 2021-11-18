@@ -4,28 +4,38 @@
         <h2 class="h4">タスクの編集</h2>
     </div>
     <div class="mb-3">
-        <form method="post">
+        <form method="post" action="/tasks/{{$task->id}}/edit">
             @csrf
             <div class="mb-3">
                 <label class="form-label">タスク名</label>
-                <input type="text" class="form-control" name="name" value="{{$task->plan}}">
-                @if(true)
-                <div class="error-message">30文字以内で入力してください</div>
+                <input type="text" class="form-control" name="plan" value="{{session()->get("old_form.plan")}}">
+
+                @if(in_array("The plan field is required.", (array)session()->get("errors.plan")))
+                <div class="error-message">タスクを入力してください</div>
+                @endif
+                @if(in_array("The plan must not be greater than 20 characters.", (array)session()->get("errors.plan")))
+                <div class="error-message">20文字以内で入力してください</div>
                 @endif
             </div>
             <div class="mb-3">
                 <label class="form-label">日付</label>
-                <input type="date" class="form-control" name="date_on" value="{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $task->date_do)->format("Y-m-d")}}">
-                @if(false)
+                <input type="date" class="form-control" name="date_do" value="{{session()->get("old_form.date_do")}}">
+                @if(in_array("The date do field is required.", (array)session()->get("errors.date_do")))
                 <div class="error-message">適切な日付を入力してください</div>
+                @endif
+                @if(in_array("The date do must be a date after yesterday.", (array)session()->get("errors.date_do")))
+                <div class="error-message">本日以降を入力してください</div>
                 @endif
             </div>
             <div class="space-evenly mt-5">
                 <input type="button" onclick="location.href='/tasks'" class="btn btn-light" value="キャンセル">
                 <input type="submit" class="btn btn-dark" value="タスクの修正">
             </div>
+        </form>
+        <form method="post" action="/tasks/{{$task->id}}/delete">
+            @csrf
             <div class="delete-button">
-                <button type="button" onclick="location.href='/tasks'" class="btn btn-danger mt-3">タスクを削除</button>
+                <button type="submit" class="btn btn-danger mt-3">タスクを削除</button>
             </div>
         </form>
     </div>

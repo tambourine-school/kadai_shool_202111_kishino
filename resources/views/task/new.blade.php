@@ -8,16 +8,22 @@
             @csrf
             <div class="mb-3">
                 <label class="form-label">タスク名</label>
-                <input type="text" class="form-control" name="name">
-                @if(true)
+                <input type="text" class="form-control" name="plan" value="{{session()->get("old_form.plan")}}">
+                @if(in_array("The plan field is required.", (array)session()->get("errors.plan")))
                 <div class="error-message">タスクを入力してください</div>
+                @endif
+                @if(in_array("The plan must not be greater than 20 characters.", (array)session()->get("errors.plan")))
+                <div class="error-message">20文字以内で入力してください</div>
                 @endif
             </div>
             <div class="mb-3">
                 <label class="form-label">日付</label>
-                <input type="date" class="form-control" name="date_on">
-                @if(true)
+                <input type="date" class="form-control" name="date_do" value="{{session()->get("old_form.date_do")}}">
+                @if(in_array("The date do field is required.", (array)session()->get("errors.date_do")))
                 <div class="error-message">適切な日付を入力してください</div>
+                @endif
+                @if(in_array("The date do must be a date after yesterday.", (array)session()->get("errors.date_do")))
+                <div class="error-message">本日以降を入力してください</div>
                 @endif
             </div>
             <div class="space-evenly mt-5">
