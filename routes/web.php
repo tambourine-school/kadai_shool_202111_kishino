@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [\App\Http\Controllers\TaskController::class, "getTopPage"]);
-Route::get('/tasks', [\App\Http\Controllers\TaskController::class, "getTasksPage"]);
+Route::get('/tasks/doing/{page}', [\App\Http\Controllers\TaskController::class, "getTasksPage"]);
 Route::get('/tasks/new', [\App\Http\Controllers\TaskController::class, "getNewTaskPage"]);
 Route::get('/tasks/{id}/edit', [\App\Http\Controllers\TaskController::class, "getEditTaskPage"]);
 Route::get('/tasks/{id}/done', [\App\Http\Controllers\TaskController::class, "getDoneTaskPage"]);

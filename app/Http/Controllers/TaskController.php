@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Service\TaskService;
+use Illuminate\Support\Str;
 
 class TaskController
 {
@@ -16,14 +17,17 @@ class TaskController
 
     public function getTopPage()
     {
-        return redirect('/tasks');
+        return redirect('/tasks/doing/1');
     }
 
-    public function getTasksPage()
+    public function getTasksPage($page)
     {
-        $tasks = $this->taskService->getRunningTasks();
+        $tasks = $this->taskService->getRunningTasksPerTen($page);
+        $isNotLast = $this->taskService->isNotLast($page);
         return view('task.list', [
-            "tasks" => $tasks
+            "tasks" => $tasks,
+            "id" => $page,
+            "isNotLast" => $isNotLast,
         ]);
     }
 
@@ -32,12 +36,9 @@ class TaskController
         return view('task.new');
     }
 
-    public function getEditTaskPage($id)
+    public function getEditTaskPage($hashedId)
     {
-        if ($id !== "" . (int)$id) {
-            return abort(404);
-        }
-        $task = $this->taskService->getFirstTask($id);
+        $task = $this->taskService->getFirstTaskByHashedId($hashedId);
         if (!$task) {
             return abort(404);
         }
@@ -53,12 +54,9 @@ class TaskController
         ]);
     }
 
-    public function getDoneTaskPage($id)
+    public function getDoneTaskPage($hashedId)
     {
-        if ($id !== "" . (int)$id) {
-            return abort(404);
-        }
-        $task = $this->taskService->getFirstTask($id);
+        $task = $this->taskService->getFirstTaskByHashedId($hashedId);
         if (!$task) {
             return abort(404);
         }
@@ -92,6 +90,7 @@ class TaskController
     public function postNewTask()
     {
         $payload = [
+            "hashed_id" => Str::random(20),
             "plan" => request()->get("plan"),
             "date_do" => request()->get("date_do"),
             "status" => 0,
@@ -108,10 +107,10 @@ class TaskController
             return redirect("/tasks/new");
         }
         $this->taskService->insertTask($payload);
-        return redirect("/tasks");
+        return redirect("/tasks/doing/1");
     }
 
-    public function postEditTask($id)
+    public function postEditTask($hashedId)
     {
         $payload = [
             "plan" => request()->get("plan"),
@@ -125,19 +124,19 @@ class TaskController
         if ($val->fails()) {
             session()->flash("old_form", $payload);
             session()->flash("errors", $val->errors()->toArray());
-            return redirect("/tasks/$id/edit");
+            return redirect("/tasks/$hashedId/edit");
         }
-        $this->taskService->updateTask($id, $payload);
-        return redirect("/tasks");
+        $this->taskService->updateTask($hashedId, $payload);
+        return redirect("/tasks/doing/1");
     }
 
-    public function postDeleteTask($id)
+    public function postDeleteTask($hashedId)
     {
-        $this->taskService->deleteTask($id);
-        return redirect("/tasks");
+        $this->taskService->deleteTask($hashedId);
+        return redirect("/tasks/doing/1");
     }
 
-    public function postDoneTask($id)
+    public function postDoneTask($hashedId)
     {
         $payload = [
             "status" => request()->get("status"),
@@ -153,9 +152,9 @@ class TaskController
         if ($val->fails()) {
             session()->flash("old_form", $payload);
             session()->flash("errors", $val->errors()->toArray());
-            return redirect("/tasks/$id/done");
+            return redirect("/tasks/$hashedId/done");
         }
-        $this->taskService->updateTask($id, $payload);
-        return redirect("/tasks");
+        $this->taskService->updateTask($hashedId, $payload);
+        return redirect("/tasks/doing/1");
     }
 }

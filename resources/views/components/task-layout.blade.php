@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
         <div class="container">
-            <a class="navbar-brand" href="/tasks">自己研鑽専用Todoリスト</a>
+            <a class="navbar-brand" href="/tasks/doing/1">自己研鑽専用Todoリスト</a>
         </div>
     </nav>
     <div class="container">

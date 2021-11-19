@@ -8,10 +8,16 @@ use Carbon\Carbon;
 class TaskService
 {
 
-    public function getRunningTasks()
+    public function getRunningTasksPerTen($page)
     {
-        $tasks = DB::table("tasks")->where("status", "=", 0)->orderBy('date_do')->get();
+        $tasks = DB::table("tasks")->where("status", "=", 0)->orderBy('date_do')->skip(($page - 1) * 10)->take(10)->get();
         return $tasks;
+    }
+
+    public function isNotLast($page)
+    {
+        $isExists = DB::table("tasks")->where("status", "=", 0)->orderBy('date_do')->skip($page * 10)->exists();
+        return $isExists;
     }
 
     public function getFinishedTasks()
@@ -20,9 +26,9 @@ class TaskService
         return $tasks;
     }
 
-    public function getFirstTask($id)
+    public function getFirstTaskByHashedId($hashedId)
     {
-        $task = DB::table("tasks")->where("id", "=", $id)->first();
+        $task = DB::table("tasks")->where("hashed_id", "=", $hashedId)->first();
         return $task;
     }
 
@@ -31,14 +37,14 @@ class TaskService
         DB::table("tasks")->insert($payload);
     }
 
-    public function updateTask($id, $payload)
+    public function updateTask($hashedId, $payload)
     {
-        DB::table("tasks")->where("id", $id)->update($payload);
+        DB::table("tasks")->where("hashed_id", $hashedId)->update($payload);
     }
 
-    public function deleteTask($id)
+    public function deleteTask($hashedId)
     {
-        DB::table("tasks")->where("id", $id)->delete();
+        DB::table("tasks")->where("hashed_id", $hashedId)->delete();
     }
 
     public function getTasksByKeyword($keyword)

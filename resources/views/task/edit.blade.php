@@ -4,7 +4,7 @@
         <h2 class="h4">タスクの編集</h2>
     </div>
     <div class="mb-3">
-        <form method="post" action="/tasks/{{$task->id}}/edit">
+        <form method="post" action="/tasks/{{$task->hashed_id}}/edit">
             @csrf
             <div class="mb-3">
                 <label class="form-label">タスク名</label>
@@ -28,11 +28,11 @@
                 @endif
             </div>
             <div class="space-evenly mt-5">
-                <input type="button" onclick="location.href='/tasks'" class="btn btn-light" value="キャンセル">
+                <input type="button" onclick="history.back()" class="btn btn-light" value="キャンセル">
                 <input type="submit" class="btn btn-dark" value="タスクの修正">
             </div>
         </form>
-        <form method="post" action="/tasks/{{$task->id}}/delete">
+        <form method="post" action="/tasks/{{$task->hashed_id}}/delete">
             @csrf
             <div class="delete-button">
                 <button type="submit" class="btn btn-danger mt-3">タスクを削除</button>

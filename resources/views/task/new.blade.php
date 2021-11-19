@@ -27,7 +27,7 @@
                 @endif
             </div>
             <div class="space-evenly mt-5">
-                <input type="button" onclick="location.href='/tasks'" class="btn btn-light" value="キャンセル">
+                <input type="button" onclick="history.back()" class="btn btn-light" value="キャンセル">
                 <input type="submit" class="btn btn-dark" value="タスクの追加">
             </div>
         </form>
