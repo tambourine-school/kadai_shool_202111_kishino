@@ -20,6 +20,12 @@ class TaskService
         return $isExists;
     }
 
+    public function getRunningTasksNumber()
+    {
+        $number = DB::table("tasks")->where("status", "=", 0)->orderBy('date_do')->count();
+        return $number;
+    }
+
     public function getFinishedTasks()
     {
         $tasks = DB::table("tasks")->whereIn("status", [1, 2])->orderBy('date_do')->get();
