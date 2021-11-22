@@ -30,5 +30,5 @@
         </div>
     </div>
     @endforeach
-    <input type="submit" onclick="location.href='/tasks'" class="btn btn-dark mt-3" value="タスク一覧へ戻る">
+    <input type="submit" onclick="history.back()" class="btn btn-dark mt-3" value="タスク一覧へ戻る">
 </x-task-layout>

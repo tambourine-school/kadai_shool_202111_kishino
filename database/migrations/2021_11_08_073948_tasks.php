@@ -15,6 +15,7 @@ class Tasks extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->string('hashed_id');
             $table->string('plan');
             $table->integer('status');
             $table->dateTime('date_do');

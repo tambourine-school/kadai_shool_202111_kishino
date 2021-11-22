@@ -2,35 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Service\TaskService;
+use Illuminate\Support\Str;
 
 class TaskController
 {
-    public function getTop()
+    protected $taskService;
+
+    public function __construct(TaskService $taskService)
     {
-        return redirect('/tasks');
+        $this->taskService = $taskService;
     }
 
-    public function getList()
+    public function getTopPage()
     {
-        $tasks = DB::table("tasks")->where("status", "=", 0)->orderBy('date_do')->get();
+        return redirect('/tasks/doing/1');
+    }
+
+    public function getTasksPage($page)
+    {
+        $tasks = $this->taskService->getRunningTasksPerTen($page);
+        $isNotLast = $this->taskService->isNotLast($page);
         return view('task.list', [
-            "tasks" => $tasks
+            "tasks" => $tasks,
+            "id" => $page,
+            "isNotLast" => $isNotLast,
         ]);
     }
 
-    public function getNew()
+    public function getNewTaskPage()
     {
         return view('task.new');
     }
 
-    public function getEdit($id)
+    public function getEditTaskPage($hashedId)
     {
-        if ($id !== "" . (int)$id) {
-            return abort(404);
-        }
-        $task = $this->getFirstTask($id);
+        $task = $this->taskService->getFirstTaskByHashedId($hashedId);
         if (!$task) {
             return abort(404);
         }
@@ -46,12 +54,9 @@ class TaskController
         ]);
     }
 
-    public function getDone($id)
+    public function getDoneTaskPage($hashedId)
     {
-        if ($id !== "" . (int)$id) {
-            return abort(404);
-        }
-        $task = $this->getFirstTask($id);
+        $task = $this->taskService->getFirstTaskByHashedId($hashedId);
         if (!$task) {
             return abort(404);
         }
@@ -60,31 +65,96 @@ class TaskController
         ]);
     }
 
-    public function getFinishedList()
+    public function getFinishedTaskPage()
     {
-        $tasks = DB::table("tasks")->whereIn("status", [1, 2])->orderBy('date_do')->get();
+        $tasks = $this->taskService->getFinishedTasks();
         return view('task.finished-list', [
             "tasks" => $tasks
         ]);
     }
 
-    public function getSearch()
+    public function getSearchPage()
     {
         $keyword = request()->get("keyword");
         $targetPeriod = request()->get("target-period");
         if ($targetPeriod == 'past') {
-            $now = Carbon::now();
-            $tasks = DB::table("tasks")->where("plan", "like", "%$keyword%")->where("date_do", "<=", $now)->orderBy('date_do')->get();
+            $tasks = $this->taskService->getTasksByKeywordFromNow($keyword);
         } elseif ($targetPeriod == '') {
-            $tasks = DB::table("tasks")->where("plan", "like", "%$keyword%")->orderBy('date_do')->get();
+            $tasks = $this->taskService->getTasksByKeyword($keyword);
         }
         return view('task.search', [
             "tasks" => $tasks, "keyword" => $keyword
         ]);
     }
 
-    protected function getFirstTask($id)
+    public function postNewTask()
     {
-        return DB::table("tasks")->where("id", "=", $id)->first();
+        $payload = [
+            "hashed_id" => Str::random(20),
+            "plan" => request()->get("plan"),
+            "date_do" => request()->get("date_do"),
+            "status" => 0,
+            "created_at" => Carbon::now(),
+        ];
+        $rules = [
+            "plan" => ["required", "max:20"],
+            "date_do" => ["required", "after:yesterday"],
+        ];
+        $val = validator($payload, $rules);
+        if ($val->fails()) {
+            session()->flash("old_form", $payload);
+            session()->flash("errors", $val->errors()->toArray());
+            return redirect("/tasks/new");
+        }
+        $this->taskService->insertTask($payload);
+        return redirect("/tasks/doing/1");
+    }
+
+    public function postEditTask($hashedId)
+    {
+        $payload = [
+            "plan" => request()->get("plan"),
+            "date_do" => request()->get("date_do"),
+        ];
+        $rules = [
+            "plan" => ["required", "max:20"],
+            "date_do" => ["required", "after:yesterday"],
+        ];
+        $val = validator($payload, $rules);
+        if ($val->fails()) {
+            session()->flash("old_form", $payload);
+            session()->flash("errors", $val->errors()->toArray());
+            return redirect("/tasks/$hashedId/edit");
+        }
+        $this->taskService->updateTask($hashedId, $payload);
+        return redirect("/tasks/doing/1");
+    }
+
+    public function postDeleteTask($hashedId)
+    {
+        $this->taskService->deleteTask($hashedId);
+        return redirect("/tasks/doing/1");
+    }
+
+    public function postDoneTask($hashedId)
+    {
+        $payload = [
+            "status" => request()->get("status"),
+            "check" => request()->get("check"),
+            "action" => request()->get("action"),
+        ];
+        $rules = [
+            "status" => ["required"],
+            "check" => ["required", "max:400"],
+            "action" => ["required", "max:400"],
+        ];
+        $val = validator($payload, $rules);
+        if ($val->fails()) {
+            session()->flash("old_form", $payload);
+            session()->flash("errors", $val->errors()->toArray());
+            return redirect("/tasks/$hashedId/done");
+        }
+        $this->taskService->updateTask($hashedId, $payload);
+        return redirect("/tasks/doing/1");
     }
 }
