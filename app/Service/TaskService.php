@@ -14,12 +14,6 @@ class TaskService
         return $tasks;
     }
 
-    public function isNotLast($page)
-    {
-        $isExists = DB::table("tasks")->where("status", "=", 0)->orderBy('date_do')->skip($page * 10)->exists();
-        return $isExists;
-    }
-
     public function getRunningTasksNumber()
     {
         $number = DB::table("tasks")->where("status", "=", 0)->orderBy('date_do')->count();
