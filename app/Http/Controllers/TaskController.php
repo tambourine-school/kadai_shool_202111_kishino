@@ -22,8 +22,14 @@ class TaskController
 
     public function getTasksPage($page)
     {
+        if ($page !== "" . (int)$page) {
+            return abort(404);
+        }
+        $isNotLast = $this->taskService->getRunningTasksNumber() >= $page * 10;
+        if (!$isNotLast) {
+            return abort(404);
+        }
         $tasks = $this->taskService->getRunningTasksPerTen($page);
-        $isNotLast = $this->taskService->isNotLast($page);
         return view('task.list', [
             "tasks" => $tasks,
             "id" => $page,
